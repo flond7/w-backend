@@ -38,9 +38,21 @@ http://127.0.0.1:8000/admin/
 - add urls to urlpatterns in mainProject/mainProject/urls.py 
   -- add include in    from django.urls import path, include
   -- use include in the form of path('api/', include('api.urls')) in the urlpatterns array
+  -- create a project/app-name/urls.py file with
+  from django.urls import path
+  from . import views
+  urlpatterns = [
+    path('', views.apiOverview, name="api-overwiev"),
+    path('w-list', views.nameOfViewOne, name="w-list"),
+    path('w-detail/<str:pk>', views.womannameOfViewTwo, name="w-detail"),
+  ]
 
 # CREATE AN API
 - requires, model, serializer, view and a migration
+- install DRF django rest framework and utilties
+  pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 djangorestframework
+  pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 markdown
+  pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 django-filter
 - *** IF NOT USING SQLite3 SEE INSTALL MONGODB ***
 - crete a model (table structure) in mainProject/api/models.py
   -- adding blank=True in the model type makes it not required (es: models.EmailField(blank=True))
@@ -86,20 +98,34 @@ https://realpython.com/django-migrations-a-primer/
           'NAME': 'w-database',
       }
   }
+- in project/app-name/models.py change che import models from django.db to
+  from djongo import models
 - makemigrations and then migrate to change to mongoDB:
   python manage.py makemigrations
   python manage.py migrate  
   *** REMEMBER: makemigration creates the file to create the tables, migrates actually creates them ***
 
+*** CREATE A SERIALIZER ***
+- in project/app-name create a serializer.py file with
+  from rest_framework import serializers
+  from .models import woman, path
+
+  class womanSerializer(serializers.ModelSerializer):
+    class Meta:
+      model = woman
+      fields = '__all__'
+      depth = 1
+
+
+
+
 *** NESTED MODELS ***
 - add _id = models.ObjectIdField() to the model fields of the nested model in order to have nested models
-
 
 *** WITH ERROR NotImplementedError: Database objects do not implement truth value testing or bool(). Please compare with None instead: database is not None ***
 - pymongo version might be wrong, use 3.12.1
   pip uninstall pymongo
   pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 pymongo==3.12.1 
-
 
 *** WITH ERROR cannot be of type "<class \'django.db.models.fields.BigAutoField\'>" ***
 - If it's a mega object with nested objects defined as models, remember to add abstract = True to the Meta class, wich means that djongo won't create a new "table" for the model just include the field where you embedded them
@@ -108,12 +134,8 @@ https://realpython.com/django-migrations-a-primer/
   -- python manage.py makepigrations
   -- python manage.py migrate
 
-*** WITH ERROR 'djongo' isn't an available database backend or couldn't be imported.  ***
-- try installing pytz
-  pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 pytz
 
-
-## MODELS SPECIFICS
+## CONSTANTS FILE
 To use constants for models, 
 - Create a separate file (es modelsConstat)
 - Import it on the main models in the form of: from my-app-name.modelConstants import *
