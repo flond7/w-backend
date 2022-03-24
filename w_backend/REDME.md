@@ -79,6 +79,13 @@ https://realpython.com/django-migrations-a-primer/
   pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 mongoengine
 - install the right pymongo versione (eventually remove if its >4.0)
   pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 pymongo==3.12.1 
+- in settings.py change the default DATABASE in
+  DATABASES = {
+      'default': {
+          'ENGINE': 'djongo',
+          'NAME': 'w-database',
+      }
+  }
 - makemigrations and then migrate to change to mongoDB:
   python manage.py makemigrations
   python manage.py migrate  
@@ -87,10 +94,12 @@ https://realpython.com/django-migrations-a-primer/
 *** NESTED MODELS ***
 - add _id = models.ObjectIdField() to the model fields of the nested model in order to have nested models
 
+
 *** WITH ERROR NotImplementedError: Database objects do not implement truth value testing or bool(). Please compare with None instead: database is not None ***
 - pymongo version might be wrong, use 3.12.1
   pip uninstall pymongo
   pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 pymongo==3.12.1 
+
 
 *** WITH ERROR cannot be of type "<class \'django.db.models.fields.BigAutoField\'>" ***
 - If it's a mega object with nested objects defined as models, remember to add abstract = True to the Meta class, wich means that djongo won't create a new "table" for the model just include the field where you embedded them
@@ -98,6 +107,10 @@ https://realpython.com/django-migrations-a-primer/
   -- in migration folder KEEP __init__.py and delete all the other files 
   -- python manage.py makepigrations
   -- python manage.py migrate
+
+*** WITH ERROR 'djongo' isn't an available database backend or couldn't be imported.  ***
+- try installing pytz
+  pip install --proxy=http://proxy-bc-el.regione.fvg.it:801 pytz
 
 
 ## MODELS SPECIFICS
