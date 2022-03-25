@@ -3,8 +3,8 @@ from rest_framework.response import Response
 
 from django.shortcuts import render
 
-from .serializer import womanSerializer
-from .models import woman
+from .serializer import womanSerializer, pathSerializer
+from .models import woman, path
 
 
 # Create your views here.
