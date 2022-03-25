@@ -1,5 +1,7 @@
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 
 from django.shortcuts import render
 
@@ -50,5 +52,4 @@ def womanUpdate(request, pk):
 def womanDelete(request, pk):
   w = woman.objects.get(id=pk)
   w.delete()
-  return Response ("Item deleted")
-
+  return Response ("Deleted")
